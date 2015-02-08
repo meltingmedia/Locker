@@ -1,0 +1,28 @@
+{
+    "name": "meltingmedia/locker",
+    "description": "A manager locking system for MODX Revolution.",
+    "keywords": ["MODX"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romain Tripault",
+            "email": "romain@melting-media.com",
+            "homepage": "http://melting-media.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "vendor-dir": "core/vendor/"
+    },
+    "autoload": {
+        "classmap": [
+            "core/services",
+            "core/processors",
+            "core/iLocker.php"
+        ]
+    }
+}

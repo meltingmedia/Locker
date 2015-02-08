@@ -5,7 +5,7 @@
  * @see xPDO::getService
  */
 $iPath = $this->getOption('locker.core_path', null, $this->getOption('core_path') . 'components/locker/');
-require_once $iPath . 'iLocker.php';
+require_once $iPath . 'vendor/autoload.php';
 
 /**
  * Locker service to prevent manager connexion from unauthorized users
@@ -24,21 +24,15 @@ class Locker implements iLocker
 
     public function lock(array $options = array())
     {
-        // Set system setting "maintenance mode"
-        $setting = $this->getLockStorage();
-        $setting->set('value', true);
-
         // Flush all sessions ?
 
-        return $setting->save();
+
+        return $this->setLock(true);
     }
 
     public function unlock(array $options = array())
     {
-        $setting = $this->getLockStorage();
-        $setting->set('value', false);
-
-        return $setting->save();
+        return $this->setLock(false);
     }
 
     public function isLocked()
@@ -94,6 +88,26 @@ class Locker implements iLocker
         );
     }
 
+    /**
+     * Convenient method to update the "lock" state value
+     *
+     * @param bool $value
+     *
+     * @return bool Whether or not the update went fine
+     */
+    protected function setLock($value)
+    {
+        $store = $this->getLockStorage();
+        $store->set('value', $value);
+
+        return $store->save();
+    }
+
+    /**
+     * Convenient method to retrieve the system setting where the lock "state" is stored
+     *
+     * @return modSystemSetting
+     */
     protected function getLockStorage()
     {
         /** @var modSystemSetting $setting */
