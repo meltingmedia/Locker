@@ -19,6 +19,9 @@
         "vendor-dir": "core/vendor/"
     },
     "autoload": {
+        "psr-4": {
+            "Locker\\Console\\": "core/console/"
+        },
         "classmap": [
             "core/services",
             "core/processors",

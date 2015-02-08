@@ -26,6 +26,7 @@ class Locker implements iLocker
     {
         // Flush all sessions ?
 
+        // site_status setting (for all contexts)
 
         return $this->setLock(true);
     }
@@ -38,12 +39,8 @@ class Locker implements iLocker
     public function isLocked()
     {
         $this->modx->log(modX::LOG_LEVEL_INFO, 'checking locking state');
+
         return $this->getLockStorage()->get('value');
-        // Read "maintenance mode" setting's value
-
-        //return true;
-
-        return false;
     }
 
     public function isUserAllowed()
@@ -76,6 +73,7 @@ class Locker implements iLocker
     public function displayDenied()
     {
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Rendering "denied"/maintenance message');
+
         $this->modx->sendForward(
             $this->modx->getOption('site_unavailable_page'),
             array(
@@ -126,5 +124,14 @@ class Locker implements iLocker
         }
 
         return $setting;
+    }
+
+
+    public function getCommands()
+    {
+        return array(
+            '\\Locker\\Console\\Lock',
+            '\\Locker\\Console\\Unlock',
+        );
     }
 }
