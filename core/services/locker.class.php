@@ -24,28 +24,28 @@ class Locker implements iLocker
 
     public function lock(array $options = array())
     {
-        $locked = false;
-
         // Set system setting "maintenance mode"
+        $setting = $this->getLockStorage();
+        $setting->set('value', true);
 
         // Flush all sessions ?
 
-        return $locked;
+        return $setting->save();
     }
 
     public function unlock(array $options = array())
     {
-        $unlocked = false;
+        $setting = $this->getLockStorage();
+        $setting->set('value', false);
 
-        // Remove "maintenance mode" setting
-
-        return $unlocked;
+        return $setting->save();
     }
 
     public function isLocked()
     {
-        // Read "maintenance mode" setting's value
         $this->modx->log(modX::LOG_LEVEL_INFO, 'checking locking state');
+        return $this->getLockStorage()->get('value');
+        // Read "maintenance mode" setting's value
 
         //return true;
 
@@ -92,5 +92,25 @@ class Locker implements iLocker
                 'error_pagetitle' => 'We are in maintenance',
             )
         );
+    }
+
+    protected function getLockStorage()
+    {
+        /** @var modSystemSetting $setting */
+        $setting = $this->modx->getObject('modSystemSetting', array(
+            'key' => 'locker.locked',
+        ));
+        if (!$setting) {
+            $setting = $this->modx->newObject('modSystemSetting');
+            $setting->fromArray(array(
+                'key' => 'locker.locked',
+                'xtype' => 'combo-boolean',
+                'namespace' => 'locker',
+                'value' => false,
+            ), '', true, true);
+            $setting->save();
+        }
+
+        return $setting;
     }
 }

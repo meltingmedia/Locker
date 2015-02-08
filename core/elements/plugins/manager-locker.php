@@ -21,11 +21,13 @@ $lockerClass = $modx->getOption('locker.class_name', null, 'services.Locker');
 /** @var iLocker $locker */
 $locker = $modx->getService('locker', $lockerClass, $lockerPath);
 
+// Check locked state
 $locked = $locker->isLocked();
 
 switch ($modx->event->name) {
     case 'OnManagerLoginFormRender':
         if ($locked) {
+            // Display a warning in the login form
             $modx->event->output('<div class="error">We are in maintenance!</div>');
         }
         return '';
@@ -36,7 +38,7 @@ switch ($modx->event->name) {
             return '';
         }
 
-        // Am i allowed to use modX ?
+        // Make sure the user is allowed to use the manager
         if (!$locker->isUserAllowed()) {
             return $locker->displayDenied();
         }
