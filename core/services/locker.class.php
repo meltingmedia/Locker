@@ -25,8 +25,14 @@ class Locker implements iLocker
     public function lock(array $options = array())
     {
         // Flush all sessions ?
+        if ($this->modx->getOption('locker.flush_sessions_on_lock')) {
+            //
+        }
 
         // site_status setting (for all contexts)
+        if ($this->modx->getOption('locker.status_off_on_lock')) {
+            //
+        }
 
         return $this->setLock(true);
     }
@@ -38,8 +44,6 @@ class Locker implements iLocker
 
     public function isLocked()
     {
-        $this->modx->log(modX::LOG_LEVEL_INFO, 'checking locking state');
-
         return $this->getLockStorage()->get('value');
     }
 
@@ -47,25 +51,20 @@ class Locker implements iLocker
     {
         /** @var modUser $user */
         $user = $this->modx->event->params['user'];
-        //$this->modx->log(modX::LOG_LEVEL_INFO, 'Checking if user is allowed to log in maintenance mode : '. print_r($user->toArray(), true));
-        $this->modx->log(modX::LOG_LEVEL_INFO, 'Checking if user is allowed to log in lock mode');
 
         // Assign user so we can make use of modX::hasPermission
         $this->modx->user = $user;
 
-        // Grab attributes
-        $attributes = $this->modx->event->params['attributes'];
-        //$this->modx->log(modX::LOG_LEVEL_INFO, 'attributes : '. print_r($attributes, true));
-
         $allowed = $this->modx->hasPermission('use_in_maintenance_mode');
         if (!$allowed) {
+            // Grab attributes
+            $attributes = $this->modx->event->params['attributes'];
             // Merge all context keys were the user is supposed to be logged in
             $ctx = array_merge(array('mgr'), $attributes['addContexts']);
             // Remove the sessions
             $user->removeSessionContext($ctx);
             $this->displayDenied();
         }
-        $this->modx->log(modX::LOG_LEVEL_INFO, 'Allowed .!? '. $allowed);
 
         return $allowed;
     }
