@@ -132,6 +132,7 @@ class Locker implements iLocker
         return array(
             '\\Locker\\Console\\Lock',
             '\\Locker\\Console\\Unlock',
+            '\\Locker\\Console\\Status',
         );
     }
 }

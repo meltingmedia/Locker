@@ -13,9 +13,7 @@ class Lock extends ProcessorCmd
 
     protected function processResponse(array $response = array())
     {
-        $id = $response['message'];
-
-        $this->info('Result '. $id);
+        $this->info($response['message']);
     }
 
     protected function beforeRun(array &$properties = array(), array &$options = array())

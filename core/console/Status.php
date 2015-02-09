@@ -3,12 +3,12 @@
 use MODX\Command\ProcessorCmd;
 use Symfony\Component\Console\Input\InputArgument;
 
-class Unlock extends ProcessorCmd
+class Status extends ProcessorCmd
 {
-    protected $processor = 'unlock';
+    protected $processor = 'lockstatus';
 
-    protected $name = 'manager:unlock';
-    protected $description = 'Unlock the manager';
+    protected $name = 'manager:status-lock';
+    protected $description = 'Get the manager "lock" status ';
 
     protected function processResponse(array $response = array())
     {
