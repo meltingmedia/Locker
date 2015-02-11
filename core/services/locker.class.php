@@ -22,7 +22,7 @@ class Locker implements iLocker
         $this->modx = $modx;
     }
 
-    public function lock(array $options = array())
+    public function lock()
     {
         // Flush all sessions ?
         if ($this->modx->getOption('locker.flush_sessions_on_lock')) {
@@ -37,7 +37,7 @@ class Locker implements iLocker
         return $this->setLock(true);
     }
 
-    public function unlock(array $options = array())
+    public function unlock()
     {
         return $this->setLock(false);
     }
@@ -125,7 +125,11 @@ class Locker implements iLocker
         return $setting;
     }
 
-
+    /**
+     * An array of CLI commands to register for MODX Shell
+     *
+     * @return array
+     */
     public function getCommands()
     {
         return array(
