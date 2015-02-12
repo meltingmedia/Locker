@@ -2,6 +2,8 @@
 
 An helper to lock users out of the Revolution manager.
 
+Locker was PoC'ed at [MODXCCC2015](https://github.com/modx-ccc-2015)
+
 
 ## Goals
 
@@ -13,18 +15,7 @@ Prevent login into the manager when planning some maintenance (backup, migration
 * MODX Revolution 2.3+
 
 
-## Installation
-
-
-## Basic usage
-
-
-## Documentation
-
-Documentation can be found at <https://docs.melting-media.com/locker/>.
-
-
 ## License
 
-CmpStarter is licensed under the [MIT license](LICENSE.md).
+Locker is licensed under the [MIT license](LICENSE.md).
 Copyright 2015 Melting Media <https://github.com/meltingmedia>
