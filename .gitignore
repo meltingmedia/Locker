@@ -1,5 +1,5 @@
 _build/build.config.php
 _build/vendor/
-core/vendor/
+core/components/locker/vendor/
 config.core.php
 .idea

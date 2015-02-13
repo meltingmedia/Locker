@@ -16,16 +16,16 @@
     },
     "config": {
         "preferred-install": "dist",
-        "vendor-dir": "core/vendor/"
+        "vendor-dir": "vendor/"
     },
     "autoload": {
         "psr-4": {
-            "Locker\\Console\\": "core/console/"
+            "Locker\\Console\\": "console/"
         },
         "classmap": [
-            "core/services",
-            "core/processors",
-            "core/iLocker.php"
+            "services",
+            "processors",
+            "iLocker.php"
         ]
     }
 }
