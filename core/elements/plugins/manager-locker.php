@@ -28,7 +28,10 @@ switch ($modx->event->name) {
     case 'OnManagerLoginFormRender':
         if ($locked) {
             // Display a warning in the login form
-            $modx->event->output('<div class="error">We are in maintenance!</div>');
+            $msg = $modx->getOption('locker.manager_locked_message', null, $modx->lexicon('locker.manager_locked_message'));
+            $modx->getParser()->processElementTags('', $msg);
+
+            $modx->event->output($msg);
         }
         return '';
         break;

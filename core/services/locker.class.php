@@ -20,18 +20,20 @@ class Locker implements iLocker
     public function __construct(modX $modx, array $options = array())
     {
         $this->modx = $modx;
+        if (!$this->modx->lexicon) {
+            $this->modx->getService('lexicon', $this->modx->getOption('lexicon_class', null, 'modLexicon'));
+        }
+        $this->modx->lexicon->load('locker:default');
     }
 
     public function lock()
     {
-        // Flush all sessions ?
-        if ($this->modx->getOption('locker.flush_sessions_on_lock')) {
-            //
+        if ($this->modx->getOption('locker.status_off_on_lock')) {
+            $this->setSiteStatus(false);
         }
 
-        // site_status setting (for all contexts)
-        if ($this->modx->getOption('locker.status_off_on_lock')) {
-            //
+        if ($this->modx->getOption('locker.flush_sessions_on_lock')) {
+            $this->flushSessions();
         }
 
         return $this->setLock(true);
@@ -39,6 +41,10 @@ class Locker implements iLocker
 
     public function unlock()
     {
+        if ($this->modx->getOption('locker.status_off_on_lock')) {
+            $this->setSiteStatus(true);
+        }
+
         return $this->setLock(false);
     }
 
@@ -63,28 +69,63 @@ class Locker implements iLocker
             $ctx = array_merge(array('mgr'), $attributes['addContexts']);
             // Remove the sessions
             $user->removeSessionContext($ctx);
-            $this->displayDenied();
         }
 
         return $allowed;
     }
 
+    /**
+     * Convenient method to display an "error message" when a user tries to log into the manager when locked (and not being allowed to use the manager when locked)
+     *
+     * @return void
+     */
     public function displayDenied()
     {
-        $this->modx->log(modX::LOG_LEVEL_INFO, 'Rendering "denied"/maintenance message');
+        $id = $this->modx->getOption('site_unavailable_page');
+        if ($id) {
+            $url = $this->modx->makeUrl($id, '', '', 'full');
 
-        $this->modx->sendForward(
-            $this->modx->getOption('site_unavailable_page'),
-            array(
-                'error_type' => '401',
-                'error_header' => 'Status: 401 Unauthorized',
-                'response_code' => 'Status: 401 Unauthorized',
-                'error_message' => 'We are in maintenance',
-                'error_pagetitle' => 'We are in maintenance',
-            )
-        );
+            return $this->modx->sendRedirect($url);
+        }
+
+        return $this->modx->sendUnauthorizedPage();
     }
 
+    /**
+     * Convenient method to wipe all users sessions
+     *
+     * @return bool
+     */
+    protected function flushSessions()
+    {
+        /** @var modProcessorResponse $flushed */
+        $flushed = $this->modx->runProcessor('security/flush');
+
+        return $flushed->isError();
+    }
+
+    /**
+     * Convenient method to toggle the site_status (online/offline) setting
+     *
+     * @param bool $status
+     *
+     * @return bool
+     */
+    protected function setSiteStatus($status)
+    {
+        /** @var modSystemSetting $setting */
+        $setting = $this->modx->getObject('modSystemSetting', array(
+            'key' => 'site_status'
+        ));
+        $setting->set('value', (bool) $status);
+
+        $saved = $setting->save();
+        if ($saved) {
+            $this->modx->getCacheManager()->refresh();
+        }
+
+        return $saved;
+    }
     /**
      * Convenient method to update the "lock" state value
      *
