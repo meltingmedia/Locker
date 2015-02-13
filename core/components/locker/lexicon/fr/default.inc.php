@@ -12,5 +12,7 @@ $_lang['setting_locker.flush_sessions_on_lock'] = 'Vider les sessions au verroui
 $_lang['setting_locker.flush_sessions_on_lock_desc'] = 'Indique s\'il faut automatiquement purger les sessions utilisateur lors du verrouillage.';
 $_lang['setting_locker.locked'] = 'Verrouillé';
 $_lang['setting_locker.locked_desc'] = 'Indique si le manager est actuellement verrouillé.';
+$_lang['setting_locker.manager_locked_message'] = 'Message de verrouillage du manager';
+$_lang['setting_locker.manager_locked_message_desc'] = 'Le message affiché sur le formulaire de connexion du manager, lorsque celui-ci est verrouillé. Accepte les tags MODX.';
 $_lang['setting_locker.status_off_on_lock'] = 'Changer le status du site au verrouillage';
 $_lang['setting_locker.status_off_on_lock_desc'] = 'Indique s\'il faut automatique changer le status du site en "hors ligne" lors du verrouillage et "en ligne" lors du dé-verrouillage (paramètre système site_status).';
