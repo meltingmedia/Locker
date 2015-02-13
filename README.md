@@ -2,7 +2,7 @@
 
 An helper to lock users out of MODX Revolution manager.
 
-Locker was PoC'ed at [MODXCCC2015](https://github.com/modx-ccc-2015)
+Locker was PoC'ed at [MODXCCC2015](https://github.com/modx-ccc-2015), as a first component to handle (automatic) MODX revolution upgrade.
 
 
 ## Goals
@@ -23,6 +23,11 @@ Only "sudo" users or users with the `use_in_maintenance_mode` permission (you wo
 2. Head over system settings to tweak to your needs
 
 You should be ready to go!
+
+
+## Documentation
+
+<https://docs.melting-media.com/locker/>
 
 
 ## Bug reports
