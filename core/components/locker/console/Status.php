@@ -9,6 +9,7 @@ class Status extends ProcessorCmd
 
     protected $name = 'manager:status-lock';
     protected $description = 'Get the manager "lock" status ';
+    protected $service = 'locker';
 
     protected function processResponse(array $response = array())
     {
@@ -17,8 +18,8 @@ class Status extends ProcessorCmd
 
     protected function beforeRun(array &$properties = array(), array &$options = array())
     {
-        //echo print_r($options);
-
-        $options['processors_path'] = '/home/labo/locker/core/processors/';
+        /** @var \Locker $service */
+        $service = $this->getApplication()->getMODX()->getService($this->service);
+        $options['processors_path'] = $service->config['processors_path'];
     }
 }

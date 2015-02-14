@@ -16,6 +16,7 @@ class Locker implements iLocker
      * @var modX
      */
     public $modx;
+    public $config = array();
 
     public function __construct(modX $modx, array $options = array())
     {
@@ -24,6 +25,11 @@ class Locker implements iLocker
             $this->modx->getService('lexicon', $this->modx->getOption('lexicon_class', null, 'modLexicon'));
         }
         $this->modx->lexicon->load('locker:default');
+
+        $base = $this->modx->getOption('locker.core_path', null, $this->modx->getOption('core_path') . 'components/locker/');
+        $this->config = array_merge(array(
+            'processors_path' => $base . 'processors/',
+        ), $options);
     }
 
     public function lock()
