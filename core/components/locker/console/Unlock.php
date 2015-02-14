@@ -1,6 +1,6 @@
 <?php namespace Locker\Console;
 
-use MODX\Command\ProcessorCmd;
+use MODX\Shell\Command\ProcessorCmd;
 use Symfony\Component\Console\Input\InputArgument;
 
 class Unlock extends ProcessorCmd
@@ -19,7 +19,7 @@ class Unlock extends ProcessorCmd
     protected function beforeRun(array &$properties = array(), array &$options = array())
     {
         /** @var \Locker $service */
-        $service = $this->getApplication()->getMODX()->getService($this->service);
+        $service = $this->modx->getService($this->service);
         $options['processors_path'] = $service->config['processors_path'];
     }
 }
