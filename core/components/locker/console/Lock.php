@@ -1,8 +1,10 @@
 <?php namespace Locker\Console;
 
 use MODX\Shell\Command\ProcessorCmd;
-use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * A MODX Shell command to lock the manager
+ */
 class Lock extends ProcessorCmd
 {
     protected $processor = 'lock';

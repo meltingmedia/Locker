@@ -28,7 +28,7 @@ switch ($modx->event->name) {
     case 'OnManagerLoginFormRender':
         if ($locked) {
             // Display a warning in the login form
-            $msg = $modx->getOption('locker.manager_locked_message', null, $modx->lexicon('locker.manager_locked_message'));
+            $msg = $modx->getOption('locker.manager_locked_message', null, '<div class="warning">[[%locker.manager_locked_message]]</div>');
             $modx->getParser()->processElementTags('', $msg);
 
             $modx->event->output($msg);

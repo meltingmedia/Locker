@@ -1,8 +1,10 @@
 <?php namespace Locker\Console;
 
 use MODX\Shell\Command\ProcessorCmd;
-use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * A MODX Shell command to get the current "lock status" of the manager
+ */
 class Status extends ProcessorCmd
 {
     protected $processor = 'lockstatus';

@@ -2,7 +2,7 @@
 /**
  * @var array $_lang
  */
-$_lang['locker.manager_locked_message'] = '<div class="warning">Manager actuallement verrouillé.</div>';
+$_lang['locker.manager_locked_message'] = 'Manager actuallement verrouillé.';
 
 $_lang['setting_locker.class_name'] = 'Nom de classe';
 $_lang['setting_locker.class_name_desc'] = 'Le nom de la classe de service à utiliser.';

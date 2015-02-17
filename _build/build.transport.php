@@ -5,15 +5,16 @@
 
 $tstart = microtime(true);
 set_time_limit(0);
+$root = dirname(__DIR__) . '/';
 
 // Define package names
 define('PKG_NAME', 'Locker');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
-define('PKG_VERSION', '0.1.0');
-define('PKG_RELEASE', 'pl');
+$version = explode('-', file_get_contents($root . 'VERSION'));
+define('PKG_VERSION', $version[0]);
+define('PKG_RELEASE', $version[1]);
 
 // Define build paths
-$root = dirname(__DIR__) . '/';
 $sources = array(
     'root'       => $root,
     'build'      => $root . '_build/',
