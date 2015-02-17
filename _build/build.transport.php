@@ -28,13 +28,17 @@ $sources = array(
     'assets'     => $root . 'assets/',
     'core'       => $root . 'core/components/locker/',
 
-    'build_dir'  => '/home/_builds/locker/'
+    'build_dir'  => '/home/_builds/' . PKG_NAME_LOWER . '/'
 );
 unset($root);
 
 // Override with your own defines here (see build.config.sample.php)
 require_once $sources['build'] . 'build.config.php';
-require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
+if (file_exists(MODX_CORE_PATH . 'vendor/autoload.php')) {
+    require_once MODX_CORE_PATH . 'vendor/autoload.php';
+} else {
+    require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
+}
 require_once $sources['build'] . 'includes/helper.php';
 
 // Instantiate modX
@@ -74,6 +78,13 @@ if (empty($plugins)) {
 }
 $category->addMany($plugins);
 
+$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in chunks...');
+$chunks = include $sources['data'] . 'chunks.php';
+if (empty($chunks)) {
+    $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in chunks.');
+}
+$category->addMany($chunks);
+
 // Create category vehicle
 $attr = array(
     xPDOTransport::UNIQUE_KEY                => 'category',
@@ -94,21 +105,28 @@ $attr = array(
                 ),
             ),
         ),
+        'Chunks'  => array(
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => false,
+            xPDOTransport::UNIQUE_KEY    => 'name',
+        ),
     ),
 );
 $vehicle = $builder->createVehicle($category, $attr);
 
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding PHP resolvers to category...');
+$vehicle->resolve('php', array(
+    'source' => $sources['resolvers'] . 'console.php',
+));
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding file resolvers to category...');
 $vehicle->resolve('file', array(
     'source' => $sources['core'],
     'target' => "return MODX_CORE_PATH . 'components/';",
 ));
-$vehicle->resolve('php', array(
-    'source' => $sources['resolvers'] . 'console.php',
-));
 $builder->putVehicle($vehicle);
 
 // Load system settings
+$modx->log(modX::LOG_LEVEL_INFO, 'Packaging in settings...');
 $settings = include $sources['data'] . 'settings.php';
 if (!is_array($settings)) {
     $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in settings.');
