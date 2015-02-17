@@ -102,6 +102,9 @@ $vehicle->resolve('file', array(
     'source' => $sources['core'],
     'target' => "return MODX_CORE_PATH . 'components/';",
 ));
+$vehicle->resolve('php', array(
+    'source' => $sources['resolvers'] . 'console.php',
+));
 $builder->putVehicle($vehicle);
 
 // Load system settings
